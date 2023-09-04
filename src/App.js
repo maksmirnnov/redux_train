@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "./store/asyncActions/fetchUsers";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchUsers())
+    }, [])
+
+    const users = useSelector(state => state.users.users)
+
+    return (
+        <div className="App bg-gray-800 h-screen">
+            <div className="cards grid grid-cols-3 gap-4 justify-center items-center p-4">
+                {users.map(user =>
+                    <div key={user.id} className=" bg-slate-500 rounded p-2 border-1 justify-center">
+                        <p>{user.name}</p>
+                        <p>st. {user.address.street}</p>
+                        <p>{user.phone}</p>
+                        <p>Company: {user.company.name}</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default App;
